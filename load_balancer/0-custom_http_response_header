@@ -1,40 +1,22 @@
 #!/usr/bin/env bash
-# Configures a brand new Ubuntu machine with nginx and a custom
-# X-Served-By header containing the server's hostname
+# Configures a brand new Ubuntu machine with Nginx and adds a custom
+# X-Served-By response header containing the server's hostname.
+# shellcheck disable=SC2154
 
-apt-get update -y
-apt-get install -y nginx
+# Install Nginx
+sudo apt-get update -y
+sudo apt-get install -y nginx
 
-mkdir -p /var/www/html
-echo "Holberton School for the win!" > /var/www/html/index.html
-echo "Ceci n'est pas une page" > /var/www/html/404.html
+# Make sure a landing page exists
+echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
 
-cat > /etc/nginx/sites-available/default << 'EOF'
-server {
-    listen 80 default_server;
+# Add the custom header (once) inside the first server block.
+# $hostname is a built-in Nginx variable holding the machine's hostname.
+CONF="/etc/nginx/sites-available/default"
+if ! grep -q "X-Served-By" "$CONF"; then
+    sudo sed -i '0,/server {/s//server {\n\tadd_header X-Served-By $hostname;/' "$CONF"
+fi
 
-    root /var/www/html;
-    index index.html;
-    server_name _;
-
-    add_header X-Served-By HOSTNAME_PLACEHOLDER;
-
-    rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;
-
-    error_page 404 /404.html;
-    location = /404.html {
-        internal;
-    }
-
-    location / {
-        try_files $uri $uri/ =404;
-    }
-}
-EOF
-
-# Insert this machine's hostname (works on old nginx versions too)
-sed -i "s/HOSTNAME_PLACEHOLDER/$(hostname)/" /etc/nginx/sites-available/default
-
-ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-
-service nginx restart
+# Validate the config, then (re)start Nginx
+sudo nginx -t
+sudo service nginx restart
