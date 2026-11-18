@@ -16,7 +16,6 @@ echo "Holberton School for the win!" > /usr/share/nginx/html/index.html
 cat > /etc/nginx/sites-available/default << 'EOF'
 server {
     listen 80 default_server;
-    listen [::]:80 default_server;
 
     root /var/www/html;
     index index.html;
