@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Configures Nginx to run as the nginx user and listen on port 8080
+id nginx &> /dev/null || useradd -r -s /usr/sbin/nologin nginx
+pkill apache2
+pkill nginx
+sed -Ei 's/^\s*#?\s*user\s+[^;]+;/user nginx;/' /etc/nginx/nginx.conf
+chmod 644 /etc/nginx/nginx.conf
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+sed -Ei 's/\b80\b/8080/g' /etc/nginx/sites-available/default
+touch /run/nginx.pid
+chown -R nginx:nginx /run/nginx.pid /var/log/nginx /var/lib/nginx
+sudo -u nginx nginx
