@@ -1,94 +1,62 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>404 - Ceci n'est pas une page</title>
 <style>
-  :root {
-    --sky: #8fb4c9;
-    --sky-deep: #5d8aa6;
-    --paper: #f7f3e8;
-    --ink: #2b2a33;
-    --shadow: rgba(30, 40, 55, .28);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root { --sky: #2c4457; --sky-deep: #1b2c3a; --paper: #e9e3d3; --ink: #1d1c24; --shadow: rgba(0, 0, 0, .5); }
-  }
   * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; }
   body {
-    display: grid;
-    place-items: center;
-    padding: 24px;
-    background: linear-gradient(var(--sky), var(--sky-deep));
-    color: var(--ink);
-    font-family: Georgia, "Times New Roman", serif;
+    margin: 0; min-height: 100vh; display: flex; align-items: center;
+    justify-content: center; text-align: center; padding: 24px;
+    background: radial-gradient(circle at 50% 30%, #f4ead2, #d9c9a3);
+    font-family: Georgia, "Times New Roman", serif; color: #3b2f1e;
   }
-  main { text-align: center; max-width: 34rem; }
-  .sheet {
-    position: relative;
-    width: min(220px, 56vw);
-    aspect-ratio: 3 / 4;
-    margin: 0 auto 2.2rem;
-    background: var(--paper);
-    box-shadow: 0 18px 28px var(--shadow);
-    clip-path: polygon(0 0, 78% 0, 100% 18%, 100% 100%, 0 100%);
-    transform: rotate(-4deg);
-    transition: transform .6s ease;
-    animation: drift 1.4s ease-out both;
+  .frame {
+    max-width: 560px; width: 100%; padding: 32px 28px 40px;
+    background: #fbf6e8; border: 12px solid #6b4a24;
+    box-shadow: 0 0 0 4px #c9a15a, 0 20px 50px rgba(0,0,0,.35);
   }
-  .sheet::after {
-    content: "";
-    position: absolute;
-    top: 0; right: 0;
-    width: 22%; height: 18%;
-    background: linear-gradient(225deg, transparent 50%, #d9d2bd 50%);
+  .code { font-size: 88px; font-weight: bold; letter-spacing: 8px; margin: 0; color: #8c2f1b; }
+  h1 { font-style: italic; font-weight: normal; font-size: 30px; margin: 8px 0 4px; }
+  p { margin: 6px 0; font-size: 17px; }
+  .small { font-size: 14px; opacity: .75; }
+  svg { width: 220px; height: auto; margin: 6px auto 0; display: block; }
+  .smoke { animation: rise 4s ease-in infinite; opacity: 0; transform-origin: center; }
+  .smoke:nth-child(2) { animation-delay: 1.3s; }
+  .smoke:nth-child(3) { animation-delay: 2.6s; }
+  @keyframes rise {
+    0% { opacity: 0; transform: translate(0, 0) scale(.6); }
+    30% { opacity: .55; }
+    100% { opacity: 0; transform: translate(14px, -50px) scale(1.5); }
   }
-  .sheet:hover { transform: rotate(3deg) translateY(-6px); }
-  .sheet span {
-    position: absolute;
-    inset: 38% 12% auto;
-    font-size: 3.4rem;
-    letter-spacing: .08em;
-    color: var(--ink);
-    opacity: .85;
+  a.btn {
+    display: inline-block; margin-top: 18px; padding: 10px 22px;
+    background: #6b4a24; color: #fbf6e8; text-decoration: none;
+    border-radius: 3px; font-size: 16px;
   }
-  h1 {
-    margin: 0 0 .6rem;
-    font-family: "Snell Roundhand", "Brush Script MT", "Segoe Script", cursive;
-    font-weight: 400;
-    font-size: clamp(2rem, 7vw, 3rem);
-    line-height: 1.2;
-    color: var(--paper);
-    text-shadow: 0 2px 6px var(--shadow);
-  }
-  p { margin: 0 0 1.4rem; color: var(--paper); line-height: 1.6; }
-  a {
-    display: inline-block;
-    padding: .7rem 1.4rem;
-    background: var(--paper);
-    color: var(--ink);
-    text-decoration: none;
-    border-radius: 2px;
-  }
-  a:hover { background: #fff; }
-  a:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
-  @keyframes drift {
-    from { transform: rotate(-14deg) translateY(-40px); opacity: 0; }
-    to { transform: rotate(-4deg) translateY(0); opacity: 1; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .sheet { animation: none; transition: none; }
-  }
+  a.btn:hover { background: #8c2f1b; }
+  @media (prefers-reduced-motion: reduce) { .smoke { animation: none; opacity: .3; } }
 </style>
 </head>
 <body>
-<main>
-  <div class="sheet" role="img" aria-label="A blank sheet of paper"><span>404</span></div>
-  <h1>Ceci n'est pas une page</h1>
-  <p>The address you asked for doesn't exist on this server. It may have moved, or it may never have been written.</p>
-  <a href="/">Back to the home page</a>
-</main>
+  <main class="frame">
+    <p class="code">404</p>
+    <svg viewBox="0 0 240 150" role="img" aria-label="A smoking pipe">
+      <circle class="smoke" cx="62" cy="40" r="9" fill="#9a9a9a"/>
+      <circle class="smoke" cx="62" cy="40" r="9" fill="#9a9a9a"/>
+      <circle class="smoke" cx="62" cy="40" r="9" fill="#9a9a9a"/>
+      <path d="M40 62 h44 l-6 38 q-2 12 -16 12 q-14 0 -16 -12 z" fill="#5a3418"/>
+      <rect x="36" y="56" width="52" height="10" rx="3" fill="#3f230f"/>
+      <path d="M84 96 q50 6 100 20 l30 8" stroke="#3f230f" stroke-width="12"
+            fill="none" stroke-linecap="round"/>
+      <rect x="196" y="112" width="30" height="16" rx="6" fill="#1f1209"
+            transform="rotate(14 211 120)"/>
+    </svg>
+    <h1>Ceci n'est pas une page</h1>
+    <p>This is not a page. It is only a picture of a missing page.</p>
+    <p class="small">The page you were looking for does not exist,<br>but this pipe very much does not either.</p>
+    <a class="btn" href="/">Return to a real page</a>
+  </main>
 </body>
 </html>
