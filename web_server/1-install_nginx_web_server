@@ -1,45 +1,9 @@
 #!/usr/bin/env bash
 # Installs and configures nginx on a new Ubuntu machine
-
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
-apt-get install -y nginx curl
-
-# Create the page in a known location
+apt-get install -y nginx
 mkdir -p /var/www/html
 echo "Holberton School for the win!" > /var/www/html/index.html
-
-# Also write it to the legacy default root as a safeguard
-mkdir -p /usr/share/nginx/html
-echo "Holberton School for the win!" > /usr/share/nginx/html/index.html
-
-# Explicit default site: port 80, known root, returns 200 on /
-cat > /etc/nginx/sites-available/default << 'EOF'
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-
-    root /var/www/html;
-    index index.html;
-    server_name _;
-
-    location / {
-        try_files $uri $uri/ =404;
-    }
-}
-EOF
-
-# Make sure the site is enabled
-mkdir -p /etc/nginx/sites-enabled
-ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-
-# Apply the config without systemctl, with fallbacks
-nginx -t
-service nginx restart || service nginx start
-pgrep nginx > /dev/null || nginx
-
-# Wait (up to ~15s) until nginx serves the page
-for _ in $(seq 1 15); do
-    curl -s localhost | grep -q "Holberton School" && break
-    sleep 1
-done
+service nginx restart || service nginx start || nginx
+sleep 2
