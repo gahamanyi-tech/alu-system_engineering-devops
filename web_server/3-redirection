@@ -1,7 +1,33 @@
 #!/usr/bin/env bash
 # Installs nginx and configures /redirect_me to redirect with a 301
+export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
 apt-get install -y nginx
+
+mkdir -p /var/www/html
 echo "Holberton School for the win!" > /var/www/html/index.html
-sed -i '/server_name _;/a\\n\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}' /etc/nginx/sites-available/default
-service nginx restart
+
+cat > /etc/nginx/sites-available/default << 'EOF'
+server {
+    listen 80 default_server;
+    server_name _;
+
+    root /var/www/html;
+    index index.html;
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+EOF
+
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
+nginx -t
+service nginx restart || service nginx start || nginx
+sleep 2
+exit 0
