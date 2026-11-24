@@ -30,5 +30,11 @@ EOF
 # Make sure the site is enabled
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
-# Apply the config without systemctl
-service nginx restart
+# Apply the config without systemctl, falling back to starting nginx directly
+service nginx restart || service nginx start || nginx
+
+# Wait (up to ~10s) until nginx actually answers on port 80
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+    curl -s localhost | grep -q "Holberton School" && break
+    sleep 1
+done
