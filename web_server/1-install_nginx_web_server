@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+chmod +x 1-install_nginx_web_server#!/usr/bin/env bash
 # Installs and configures nginx on a new Ubuntu machine
 
 apt-get update -y
