@@ -33,5 +33,11 @@ EOF
 
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
-service nginx restart || service nginx start || nginx
+nginx -t
+if pgrep nginx > /dev/null; then
+    nginx -s reload
+else
+    service nginx start || nginx
+fi
 sleep 2
+exit 0
